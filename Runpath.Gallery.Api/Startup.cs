@@ -43,7 +43,7 @@ namespace Runpath.Gallery.Api
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, Seeder seeder)
         {
             if (env.IsDevelopment())
             {
@@ -61,6 +61,8 @@ namespace Runpath.Gallery.Api
                 config.CreateMap<Photo, PhotoDto>().ReverseMap();
                 config.CreateMap<User, UserDto>().ReverseMap();
             });
+
+            seeder.EnsureCreated();
 
             app.UseHttpsRedirection();
             app.UseMvc();
