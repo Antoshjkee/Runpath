@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System;
+using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -55,12 +56,20 @@ namespace Runpath.Gallery.Api
                 app.UseHsts();
             }
 
-            Mapper.Initialize(config =>
+            try
             {
-                config.CreateMap<Album, AlbumDto>().ReverseMap();
-                config.CreateMap<Photo, PhotoDto>().ReverseMap();
-                config.CreateMap<User, UserDto>().ReverseMap();
-            });
+                Mapper.Initialize(config =>
+                {
+                    config.CreateMap<Album, AlbumDto>().ReverseMap();
+                    config.CreateMap<Photo, PhotoDto>().ReverseMap();
+                    config.CreateMap<User, UserDto>().ReverseMap();
+                });
+            }
+            catch (Exception)
+            {
+                // Ignore for xUnit as this Configuration has bein re-used for Test project.
+                // TODO : Create Startup configuration for Runpath.Gallery.Tests
+            }
 
             seeder.EnsureCreated();
 

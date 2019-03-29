@@ -37,6 +37,7 @@ namespace Runpath.Gallery.Api.Controllers
         public ActionResult<AlbumDto> GetSingle(int userId, int id)
         {
             var album = _albumRepository.FindBy(x => x.Id == id && x.UserId == userId)
+                .Include(x => x.Photos)
                 .FirstOrDefault();
 
             if (album == null)  return NotFound();
