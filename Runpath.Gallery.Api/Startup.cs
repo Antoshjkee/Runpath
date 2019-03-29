@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
+using Runpath.Gallery.Api.Models;
+using Runpath.Gallery.Domain.Entities;
 
 namespace Runpath.Gallery.Api
 {
@@ -40,6 +36,13 @@ namespace Runpath.Gallery.Api
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
+            Mapper.Initialize(config =>
+            {
+                config.CreateMap<Album, AlbumDto>().ReverseMap();
+                config.CreateMap<Photo, PhotoDto>().ReverseMap();
+                config.CreateMap<User, UserDto>().ReverseMap();
+            });
 
             app.UseHttpsRedirection();
             app.UseMvc();
