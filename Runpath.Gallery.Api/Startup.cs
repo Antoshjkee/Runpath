@@ -5,6 +5,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
+using Runpath.Gallery.Api.Infrastructure;
 using Runpath.Gallery.Api.Models;
 using Runpath.Gallery.Api.Repository;
 using Runpath.Gallery.Domain;
@@ -27,7 +30,16 @@ namespace Runpath.Gallery.Api
             services.AddDbContext<GalleryContext>(options => options.UseInMemoryDatabase("Runpath.Gallery"));            
             services.AddScoped(typeof(IRepository<>), typeof(GenericRepository<>));
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddScoped<GalleryDataService>();
+            services.AddTransient<Seeder>();
+
+            services.AddMvc()
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
+                .AddJsonOptions(options =>
+                {
+                    options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+                    options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+                });;
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
